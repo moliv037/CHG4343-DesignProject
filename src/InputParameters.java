@@ -85,9 +85,9 @@ public class InputParameters {
         if(((InputParameters)comparator).E!=this.E) isEquals= false;
         if(((InputParameters)comparator).alpha!=this.alpha) isEquals= false;
         if(((InputParameters)comparator).v_0!=this.v_0) isEquals=false;
+        if(((InputParameters)comparator).type!=this.type) isEquals= false;
+        return isEquals;
+    }//equals method
 
-
-    }
-
-}
+}//end of class
 
