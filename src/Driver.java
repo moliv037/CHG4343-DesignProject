@@ -139,12 +139,9 @@ public class Driver {
 
 
         String type;
-        System.out.println("Please enter the type of reactor: ADIABATIC or ISOTHERMAL:");
+        System.out.println("Please enter either adiabatic or isothermal for the type of reactor:");
         type=scanner.next();
 
-
-        StaticParameters testObj = new StaticParameters();
-        System.out.println(testObj.getEpsilon(reactantCoefficients,productCoefficients,reactantMoleFracs));
 
 // Rest of code for output
         //code is missing value checks
