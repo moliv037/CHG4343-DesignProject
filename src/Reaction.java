@@ -26,8 +26,8 @@ public class Reaction {
   public boolean equals (Object comparator){
     if (comparator==null) return false;
     if (comparator.getClass() != this.getClass()) return false;
-    if (((Reaction)comparator).input != this.input) return false;
-    if (((Reaction)comparator).parameters != this.parameters) return false;
+    if (!((Reaction)comparator).input.equals(this.input)) return false;
+    if (!((Reaction)comparator).parameters.equals(this.parameters)) return false;
     return true;
   }//end of equals
 
