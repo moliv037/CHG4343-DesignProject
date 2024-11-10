@@ -18,8 +18,8 @@ public class Reaction {
   public boolean setInput(InputParameters input){ this.input = input.clone(); return true; }
   public boolean setParameters(StaticParameters parameters){ this.parameters = parameters.clone(); return true; }
 
-  public InputParameters getInput(){ return this.input;}
-  public StaticParameters getParameters(){ return this.parameters;}
+  public InputParameters getInput(){ return this.input.clone();}
+  public StaticParameters getParameters(){ return this.parameters.clone();}
 
   public boolean equals (Object comparator){
     if (comparator==null) return false;
