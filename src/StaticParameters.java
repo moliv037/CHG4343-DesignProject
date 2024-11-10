@@ -64,6 +64,8 @@ public class StaticParameters {
         if(reactantHeatCapacities.length == 0 || productHeatCapacities.length == 0 || inertHeatCapacities.length==0) System.exit(0);
 
         //check that coefficients are bigger than 0
+        //this syntax was suggested by java when "cleaning up" the code, the result is the same as the syntax learned in class.
+        //I kept the syntax learned in class for all the other lines.
         for (int reactantCoefficient : reactantCoefficients) if (reactantCoefficient <= 0) System.exit(0);
         for (int productCoefficient : productCoefficients) if (productCoefficient <= 0) System.exit(0);
         for (int inertCoefficient : inertCoefficients) if (inertCoefficient <= 0) System.exit(0);
@@ -346,24 +348,34 @@ public class StaticParameters {
         if (((StaticParameters)comparator).reactantHeatCapacities.length != this.reactantHeatCapacities.length) return false;
         if (((StaticParameters)comparator).productHeatCapacities.length != this.productHeatCapacities.length) return false;
         if (((StaticParameters)comparator).inertHeatCapacities.length != this.inertHeatCapacities.length) return false;
+        if (((StaticParameters)comparator).theta_reactants.length != this.theta_reactants.length) return false;
+        if (((StaticParameters)comparator).theta_products.length != this.theta_products.length) return false;
+
 
         if (((StaticParameters)comparator).input != this.input) return false;
         if (((StaticParameters)comparator).numberReactants != this.numberReactants) return false;
         if (((StaticParameters)comparator).numberProducts != this.numberProducts) return false;
         if (((StaticParameters)comparator).numberInerts != this.numberInerts) return false;
 
+        if (!(((StaticParameters)comparator).reactantCoefficients.equals(this.reactantCoefficients))) return false;
+        if (!(((StaticParameters)comparator).productCoefficients.equals(this.productCoefficients))) return false;
+        if (!(((StaticParameters)comparator).inertCoefficients.equals(this.inertCoefficients))) return false;
 
+        if (!(((StaticParameters)comparator).reactantMoleFracs.equals(this.reactantMoleFracs))) return false;
+        if(!(((StaticParameters)comparator).productMoleFracs.equals(this.productMoleFracs))) return false;
+        if(!(((StaticParameters)comparator).inertMoleFracs.equals(this.inertMoleFracs))) return false;
 
+        if(!(((StaticParameters)comparator).reactantHeatCapacities.equals(this.reactantHeatCapacities))) return false;
+        if(!(((StaticParameters)comparator).productHeatCapacities.equals(this.productHeatCapacities))) return false;
+        if(!(((StaticParameters)comparator).inertHeatCapacities.equals(this.inertHeatCapacities))) return false;
 
-
-
-
-
+        if(!(((StaticParameters)comparator).theta_reactants.equals(this.theta_reactants))) return false;
+        if(!(((StaticParameters)comparator).theta_products.equals(this.theta_products))) return false;
 
         return true;
     }//end of equals
 
-    /*Need to add equals then done class and fix related problems */
+    /*fix related problems */
 
 }//end of class
 
