@@ -4,16 +4,7 @@
 
 public class StaticParameters {
 
-    private InputParameters input;
-    /* public double getDelH_rx() {return delH_rx;}
-    public double getT0() {return T0;}
-    public double getP0() {return P0;}
-    public double getK_T0() {return k_T0;}
-    public double getE() {return E;}
-    public double getAlpha() {return alpha;}
-    public double getV_0() {return v_0;}
-    public String getType() {return type;}*/
-
+    //from driver inputs"
     private int numberReactants;
     private int numberProducts;
     private int numberInerts;
@@ -26,7 +17,18 @@ public class StaticParameters {
     private double [] reactantHeatCapacities;
     private double [] productHeatCapacities;
     private double [] inertHeatCapacities;
+    private InputParameters input;
+    /* public double getDelH_rx() {return delH_rx;}
+    public double getT0() {return T0;}
+    public double getP0() {return P0;}
+    public double getK_T0() {return k_T0;}
+    public double getE() {return E;}
+    public double getAlpha() {return alpha;}
+    public double getV_0() {return v_0;}
+    public String getType() {return type;}*/
 
+
+    //not in constructor, dont need to store because its calculated each call, for short calc do in constructor if not do setter like epsilon
     private double CA_0;
     private double FA_0;
     private double epsilon;
@@ -34,18 +36,13 @@ public class StaticParameters {
     private double [] theta_products;
 
 
-    public StaticParameters (InputParameters input,int numberReactants, int numberProducts, int numberInerts, double CA_0, double FA_0, double epsilon, int [] reactantCoefficients, int [] productCoefficients, int [] inertCoefficients, double [] reactantMoleFracs, double [] productMoleFracs, double [] inertMoleFracs, double[] reactantHeatCapacities, double[] productHeatCapacities, double[] inertHeatCapacities, double [] theta_reactants, double [] theta_products) {
+    public StaticParameters (InputParameters input,int numberReactants, int numberProducts, int numberInerts, int [] reactantCoefficients, int [] productCoefficients, int [] inertCoefficients, double [] reactantMoleFracs, double [] productMoleFracs, double [] inertMoleFracs, double[] reactantHeatCapacities, double[] productHeatCapacities, double[] inertHeatCapacities, double [] theta_reactants, double [] theta_products) {
         if (input == null) System.exit(0);
         if (numberReactants <= 0 || numberProducts <= 0 || numberInerts < 0) System.exit(0);
         this.input = input.clone(); //***check that cloning is correct here for objects
         this.numberReactants = numberReactants;
         this.numberProducts = numberProducts;
         this.numberInerts = numberInerts;
-        if (CA_0 <= 0. || FA_0 <= 0.) System.exit(0);
-        this.CA_0 = CA_0;
-        this.FA_0 = FA_0;
-
-        this.epsilon = epsilon; //epsilon can be 0, negative, or positive
 
         //check array is not null
         if (reactantCoefficients==null) System.exit(0);
@@ -112,6 +109,17 @@ public class StaticParameters {
         for (int i=0; i<inertHeatCapacities.length; i++) this.inertHeatCapacities[i]=inertHeatCapacities[i];
 
        //check that arrays are not null
+
+
+
+        // these are calculated but stored as instance variables to access through an object by other classes
+        //if all the checks above are correct, there should be there can be no error in the calculations
+        //small calculations are done directly, larger ones are in a set method
+        this.CA_0 = (this.reactantMoleFracs[0]*input.getP0())/(0.0826*input.getT0()); // here R = 0.08206 [L*atm/mol/K]
+        this.FA_0 = (this.getCA_0()*input.getV_0());
+
+        this.epsilon = setEpsilon(); //epsilon can be 0, negative, or positive
+
         if (theta_reactants==null) System.exit(0);
         if (theta_products==null) System.exit(0);
 
@@ -125,6 +133,8 @@ public class StaticParameters {
         for (int i = 0; i < theta_products.length; i++) this.theta_products[i] = theta_products[i];
 
     }//end of constructor, need to add throw exceptions
+
+
 
     public StaticParameters (StaticParameters source){
         if (source == null) System.exit(0);
@@ -164,8 +174,30 @@ public class StaticParameters {
 
     }//copy constructor
 
+
+
     public StaticParameters clone() {return new StaticParameters(this);} //clone
 
+    //setter for calcs here
+    public double setEpsilon() {
+        double deltaProducts=0.;
+        double deltaReactants = 0.;
+        double a = this.reactantCoefficients[0]; //the coefficient of the limiting reactant is [0]
+
+        for (int i=0; i<this.productCoefficients.length; i++){deltaProducts += this.productCoefficients[i]/a;}
+        for (int i=0; i<this.reactantCoefficients.length; i++){deltaReactants -= this.reactantCoefficients[i]/a;}
+
+        double delta= deltaProducts+deltaReactants;
+        return (this.reactantMoleFracs[0]*delta);
+    }
+    public double [] setTheta_reactants(){
+        double yA0 = this.reactantMoleFracs[0];
+        double [] thetas = new double [this.numberReactants];
+        for (int i = 0; i<this.numberReactants; i++){
+            thetas[i] = this.reactantMoleFracs[i]/yA0;
+        }
+        return thetas;
+    }
     public boolean setStaticParameters(InputParameters input,int numberReactants, int numberProducts, int numberInerts, double CA_0, double FA_0, double epsilon, int [] reactantCoefficients, int [] productCoefficients, int [] inertCoefficients, double [] reactantMoleFracs, double [] productMoleFracs, double [] inertMoleFracs, double[] reactantHeatCapacities, double[] productHeatCapacities, double[] inertHeatCapacities, double [] theta_reactants, double [] theta_products) {
         if (input == null) return false;
         if (numberReactants <= 0 || numberProducts <= 0 || numberInerts < 0) return false;
@@ -177,7 +209,7 @@ public class StaticParameters {
         this.CA_0 = CA_0;
         this.FA_0 = FA_0;
 
-        this.epsilon = epsilon; //epsilon can be 0, negative, or positive
+        this.epsilon = setEpsilon(); //epsilon can be 0, negative, or positive
 
         //check array is not null
         if (reactantCoefficients==null) return false;
@@ -299,24 +331,9 @@ public class StaticParameters {
         for (int i=0; i<inertHeatCapacities.length; i++) copy [i]= this.inertHeatCapacities[i];
         return copy;}
 
-    public double getCA_0 (){
-        // here R = 0.08206 [L*atm/mol/K]
-        return (this.reactantMoleFracs[0]*input.getP0())/(0.0826*input.getT0());}
-
-    public double getFA_0 (){return (this.getCA_0()*input.getV_0());}
-
-
-    public double getEpsilon (){
-        double deltaProducts=0.;
-        double deltaReactants = 0.;
-        double a = this.reactantCoefficients[0]; //the coefficient of the limiting reactant is [0]
-
-        for (int i=0; i<this.productCoefficients.length; i++){deltaProducts += this.productCoefficients[i]/a;}
-        for (int i=0; i<this.reactantCoefficients.length; i++){deltaReactants -= this.reactantCoefficients[i]/a;}
-
-        double delta= deltaProducts+deltaReactants;
-        return (this.reactantMoleFracs[0]*delta);
-    }
+    public double getCA_0 (){return this.CA_0;}
+    public double getFA_0 (){return this.FA_0;}
+    public double getEpsilon (){return this.epsilon;} //gets the number from the setter
 
     public double [] getTheta_reactants(){
         double yA0 = this.reactantMoleFracs[0];
