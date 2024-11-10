@@ -16,7 +16,7 @@ public class ODESolver {
             //checks for convergence based on tolerance
             if (Math.abs(y-y_previous) < tolerance) {
                 System.out.println("Convergence achieved within tolerance.");
-                break;
+                break; //exit the loop when convergence is reached
             }
             y_previous = y; //update value
             w = w + delW; //euler step for the independent variable
