@@ -1,4 +1,4 @@
-//The StaticParameters class calculates all the variables that are used in other classes but do not change, notably the initial conditions.
+//The StaticParameters class calculates all the variables that are used in other classes that do not change, notably the initial conditions.
 //This class will pass the necessary checks to the "static" parameters instead of doing it in the driver class.
 //To access these parameters, create an object of the StaticParameter class and use .getVariable().
 
@@ -37,7 +37,7 @@ public class StaticParameters {
     public StaticParameters (InputParameters input,int numberReactants, int numberProducts, int numberInerts, double CA_0, double FA_0, double epsilon, int [] reactantCoefficients, int [] productCoefficients, int [] inertCoefficients, double [] reactantMoleFracs, double [] productMoleFracs, double [] inertMoleFracs, double[] reactantHeatCapacities, double[] productHeatCapacities, double[] inertHeatCapacities, double [] theta_reactants, double [] theta_products) {
         if (input == null) System.exit(0);
         if (numberReactants <= 0 || numberProducts <= 0 || numberInerts < 0) System.exit(0);
-        this.input = input;
+        this.input = input.clone(); //***check that cloning is correct here for objects
         this.numberReactants = numberReactants;
         this.numberProducts = numberProducts;
         this.numberInerts = numberInerts;
@@ -63,21 +63,21 @@ public class StaticParameters {
         if (reactantMoleFracs.length == 0 || productMoleFracs.length == 0 || inertMoleFracs.length==0) System.exit(0);
         if(reactantHeatCapacities.length == 0 || productHeatCapacities.length == 0 || inertHeatCapacities.length==0) System.exit(0);
 
-
+        //check that coefficients are bigger than 0
+        //this syntax was suggested by java when "cleaning up" the code, the result is the same as the syntax learned in class.
+        //I kept the syntax learned in class for all the other lines.
+        for (int reactantCoefficient : reactantCoefficients) if (reactantCoefficient <= 0) System.exit(0);
+        for (int productCoefficient : productCoefficients) if (productCoefficient <= 0) System.exit(0);
+        for (int inertCoefficient : inertCoefficients) if (inertCoefficient <= 0) System.exit(0);
 
         //check that no mole fraction or heat capacities are smaller than 0
-        for (int i = 0; i < reactantMoleFracs.length; i++) {
-            if (reactantMoleFracs[i] < 0.) System.exit(0);}
-        for (int i = 0; i < productMoleFracs.length; i++) {
-            if (productMoleFracs[i] < 0.) System.exit(0);}
-        for (int i = 0; i < inertMoleFracs.length; i++) {
-            if (inertMoleFracs[i] < 0.) System.exit(0);}
-        for (int i = 0; i < reactantHeatCapacities.length; i++)
-            if (reactantHeatCapacities[i] < 0.) System.exit(0);
-        for (int i = 0; i < productHeatCapacities.length; i++)
-            if (productHeatCapacities[i] < 0.) System.exit(0);
-        for (int i = 0; i < inertHeatCapacities.length; i++)
-            if (inertHeatCapacities[i] < 0.) System.exit(0);
+        for (double reactantMoleFrac : reactantMoleFracs) if (reactantMoleFrac < 0.) System.exit(0);
+        for (double productMoleFrac : productMoleFracs) if (productMoleFrac < 0.) System.exit(0);
+        for (double inertMoleFrac : inertMoleFracs) if (inertMoleFrac < 0.) System.exit(0);
+
+        for (double reactantHeatCapacity : reactantHeatCapacities) if (reactantHeatCapacity < 0.) System.exit(0);
+        for (double productHeatCapacity : productHeatCapacities) if (productHeatCapacity < 0.) System.exit(0);
+        for (double inertHeatCapacity : inertHeatCapacities) if (inertHeatCapacity < 0.) System.exit(0);
 
 
         //check that the sum of mole fractions in and out are 1
@@ -90,12 +90,20 @@ public class StaticParameters {
             sum += productMoleFracs[i] + inertMoleFracs[i];
             if (sum != 1.0) System.exit(0);}
 
+        this.reactantCoefficients=new int [reactantCoefficients.length];
+        for (int i=0; i < reactantCoefficients.length; i++) this.reactantCoefficients[i]=reactantCoefficients[i];
+        this.productCoefficients=new int [productCoefficients.length];
+        for (int i=0; i<productCoefficients.length; i++) this.productCoefficients[i]=productCoefficients[i];
+        this.inertCoefficients=new int [inertCoefficients.length];
+        for (int i=0; i<inertCoefficients.length; i++) this.inertCoefficients[i]=inertCoefficients[i];
+
         this.reactantMoleFracs = new double[reactantMoleFracs.length];
         for (int j=0; j < reactantMoleFracs.length; j++) this.reactantMoleFracs[j]=reactantMoleFracs[j];
         this.productMoleFracs = new double[productMoleFracs.length];
         for (int i=0; i < productMoleFracs.length; i++) this.productMoleFracs[i]=productMoleFracs[i];
         this.inertMoleFracs = new double[inertMoleFracs.length];
         for (int i=0; i < inertMoleFracs.length; i++) this.inertMoleFracs[i]= inertMoleFracs[i];
+
         this.reactantHeatCapacities = new double[reactantHeatCapacities.length];
         for (int i=0; i < reactantHeatCapacities.length; i++) this.reactantHeatCapacities[i]=reactantHeatCapacities[i];
         this.productHeatCapacities = new double[productHeatCapacities.length];
@@ -116,10 +124,11 @@ public class StaticParameters {
         this.theta_products = new double[theta_products.length];
         for (int i = 0; i < theta_products.length; i++) this.theta_products[i] = theta_products[i];
 
-    }//constructor, need to add throw exceptions
+    }//end of constructor, need to add throw exceptions
 
     public StaticParameters (StaticParameters source){
         if (source == null) System.exit(0);
+        this.input=source.input.clone(); //clone because it is an object *check this**
         this.numberReactants = source.numberReactants;
         this.numberProducts = source.numberProducts;
         this.numberInerts = source.numberInerts;
@@ -127,12 +136,20 @@ public class StaticParameters {
         this.FA_0 = source.FA_0;
         this.epsilon = source.epsilon;
 
+        this.reactantCoefficients=new int [source.reactantCoefficients.length];
+        for (int i=0; i<reactantCoefficients.length; i++) this.reactantCoefficients[i]=source.reactantCoefficients[i];
+        this.productCoefficients=new int [source.productCoefficients.length];
+        for (int i=0; i<productCoefficients.length; i++) this.productCoefficients[i]=source.productCoefficients[i];
+        this.inertCoefficients=new int [source.inertCoefficients.length];
+        for (int i=0; i<inertCoefficients.length; i++) this.inertCoefficients[i]=source.inertCoefficients[i];
+
         this.reactantMoleFracs = new double [source.reactantMoleFracs.length];
         for (int i=0; i<reactantMoleFracs.length; i++) this.reactantMoleFracs[i]=source.reactantMoleFracs[i];
         this.productMoleFracs = new double [source.productMoleFracs.length];
         for (int i=0; i<productMoleFracs.length;i++) this.productMoleFracs[i]=source.productMoleFracs[i];
         this.inertMoleFracs = new double [source.inertMoleFracs.length];
         for (int i=0; i<inertMoleFracs.length;i++) this.inertMoleFracs[i]=source.inertMoleFracs[i];
+
         this.reactantHeatCapacities = new double[source.reactantHeatCapacities.length];
         for (int i=0; i<reactantHeatCapacities.length;i++) this.reactantHeatCapacities[i] = source.reactantHeatCapacities[i];
         this.productHeatCapacities = new double[source.productHeatCapacities.length];
@@ -149,8 +166,10 @@ public class StaticParameters {
 
     public StaticParameters clone() {return new StaticParameters(this);} //clone
 
-    public boolean setStaticParameters(int numberReactants, int numberProducts, int numberInerts, double CA_0, double FA_0, double epsilon,double [] reactantMoleFracs, double [] productMoleFracs, double [] inertMoleFracs, double[] reactantHeatCapacities, double[] productHeatCapacities, double[] inertHeatCapacities, double [] theta_reactants, double [] theta_products) {
+    public boolean setStaticParameters(InputParameters input,int numberReactants, int numberProducts, int numberInerts, double CA_0, double FA_0, double epsilon, int [] reactantCoefficients, int [] productCoefficients, int [] inertCoefficients, double [] reactantMoleFracs, double [] productMoleFracs, double [] inertMoleFracs, double[] reactantHeatCapacities, double[] productHeatCapacities, double[] inertHeatCapacities, double [] theta_reactants, double [] theta_products) {
+        if (input == null) return false;
         if (numberReactants <= 0 || numberProducts <= 0 || numberInerts < 0) return false;
+        this.input = input.clone();
         this.numberReactants = numberReactants;
         this.numberProducts = numberProducts;
         this.numberInerts = numberInerts;
@@ -161,6 +180,9 @@ public class StaticParameters {
         this.epsilon = epsilon; //epsilon can be 0, negative, or positive
 
         //check array is not null
+        if (reactantCoefficients==null) return false;
+        if (productCoefficients==null) return false;
+        if (inertCoefficients==null) return false;
         if(reactantMoleFracs==null) return false;
         if(productMoleFracs==null) return false;
         if(inertMoleFracs==null) return false;
@@ -168,6 +190,10 @@ public class StaticParameters {
         if(productHeatCapacities==null) return false;
         if(inertHeatCapacities==null) return false;
 
+        //check that the arrays cant have 0 elements
+        if(reactantCoefficients.length == 0 || productCoefficients.length == 0||inertCoefficients.length==0) return false;
+        if (reactantMoleFracs.length == 0 || productMoleFracs.length == 0 || inertMoleFracs.length==0) return false;
+        if(reactantHeatCapacities.length == 0 || productHeatCapacities.length == 0 || inertHeatCapacities.length==0) return false;
 
         //check that no mole fraction or heat capacities are smaller than 0
         for (int i = 0; i < reactantMoleFracs.length; i++) {
@@ -183,7 +209,6 @@ public class StaticParameters {
         for (int i = 0; i < inertHeatCapacities.length; i++)
             if (inertHeatCapacities[i] < 0.) return false;
 
-
         //check that the sum of mole fractions in and out are 1
         for (int i=0; i < reactantMoleFracs.length; i++) {
             double sum = 0.0;
@@ -194,12 +219,20 @@ public class StaticParameters {
             sum += productMoleFracs[i] + inertMoleFracs[i];
             if (sum != 1.0) return false;}
 
+        this.reactantCoefficients=new int [reactantCoefficients.length];
+        for (int i=0; i < reactantCoefficients.length; i++) this.reactantCoefficients[i]=reactantCoefficients[i];
+        this.productCoefficients=new int [productCoefficients.length];
+        for (int i=0; i<productCoefficients.length; i++) this.productCoefficients[i]=productCoefficients[i];
+        this.inertCoefficients=new int [inertCoefficients.length];
+        for (int i=0; i<inertCoefficients.length; i++) this.inertCoefficients[i]=inertCoefficients[i];
+
         this.reactantMoleFracs = new double[reactantMoleFracs.length];
         for (int j=0; j < reactantMoleFracs.length; j++) this.reactantMoleFracs[j]=reactantMoleFracs[j];
         this.productMoleFracs = new double[productMoleFracs.length];
         for (int i=0; i < productMoleFracs.length; i++) this.productMoleFracs[i]=productMoleFracs[i];
         this.inertMoleFracs = new double[inertMoleFracs.length];
         for (int i=0; i < inertMoleFracs.length; i++) this.inertMoleFracs[i]= inertMoleFracs[i];
+
         this.reactantHeatCapacities = new double[reactantHeatCapacities.length];
         for (int i=0; i < reactantHeatCapacities.length; i++) this.reactantHeatCapacities[i]=reactantHeatCapacities[i];
         this.productHeatCapacities = new double[productHeatCapacities.length];
@@ -221,6 +254,7 @@ public class StaticParameters {
         for (int i = 0; i < theta_products.length; i++) this.theta_products[i] = theta_products[i];
         return true;
     }//mutator, need to add throw exceptions
+
 
     public int getNumberReactants (){return this.numberReactants;}
     public int getNumberProducts (){return this.numberProducts;}
@@ -301,7 +335,47 @@ public class StaticParameters {
         return thetas;
     }
 
-/*Need to add equals then done class and fix related problems */
+    @Override
+    public boolean equals(Object comparator) {
+        if(comparator ==null) return false;
+        if (comparator.getClass() != this.getClass()) return false;
+        if (((StaticParameters)comparator).reactantCoefficients.length != this.reactantCoefficients.length) return false;
+        if (((StaticParameters)comparator).productCoefficients.length != this.productCoefficients.length) return false;
+        if (((StaticParameters)comparator).inertCoefficients.length != this.inertCoefficients.length) return false;
+        if (((StaticParameters)comparator).reactantMoleFracs.length != this.reactantMoleFracs.length) return false;
+        if (((StaticParameters)comparator).productMoleFracs.length != this.productMoleFracs.length) return false;
+        if (((StaticParameters)comparator).inertMoleFracs.length != this.inertMoleFracs.length) return false;
+        if (((StaticParameters)comparator).reactantHeatCapacities.length != this.reactantHeatCapacities.length) return false;
+        if (((StaticParameters)comparator).productHeatCapacities.length != this.productHeatCapacities.length) return false;
+        if (((StaticParameters)comparator).inertHeatCapacities.length != this.inertHeatCapacities.length) return false;
+        if (((StaticParameters)comparator).theta_reactants.length != this.theta_reactants.length) return false;
+        if (((StaticParameters)comparator).theta_products.length != this.theta_products.length) return false;
+
+
+        if (((StaticParameters)comparator).input != this.input) return false;
+        if (((StaticParameters)comparator).numberReactants != this.numberReactants) return false;
+        if (((StaticParameters)comparator).numberProducts != this.numberProducts) return false;
+        if (((StaticParameters)comparator).numberInerts != this.numberInerts) return false;
+
+        if (!(((StaticParameters)comparator).reactantCoefficients.equals(this.reactantCoefficients))) return false;
+        if (!(((StaticParameters)comparator).productCoefficients.equals(this.productCoefficients))) return false;
+        if (!(((StaticParameters)comparator).inertCoefficients.equals(this.inertCoefficients))) return false;
+
+        if (!(((StaticParameters)comparator).reactantMoleFracs.equals(this.reactantMoleFracs))) return false;
+        if(!(((StaticParameters)comparator).productMoleFracs.equals(this.productMoleFracs))) return false;
+        if(!(((StaticParameters)comparator).inertMoleFracs.equals(this.inertMoleFracs))) return false;
+
+        if(!(((StaticParameters)comparator).reactantHeatCapacities.equals(this.reactantHeatCapacities))) return false;
+        if(!(((StaticParameters)comparator).productHeatCapacities.equals(this.productHeatCapacities))) return false;
+        if(!(((StaticParameters)comparator).inertHeatCapacities.equals(this.inertHeatCapacities))) return false;
+
+        if(!(((StaticParameters)comparator).theta_reactants.equals(this.theta_reactants))) return false;
+        if(!(((StaticParameters)comparator).theta_products.equals(this.theta_products))) return false;
+
+        return true;
+    }//end of equals
+
+    /*fix related problems */
 
 }//end of class
 
