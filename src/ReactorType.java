@@ -1,5 +1,6 @@
 public abstract class ReactorType {
     private RateLaw g_rateLaw;
+    private double [] inputParameters;
     private double k;
 
     //constructor, copy constructor, abstract clone, accessor, mutator, equals, global variable stuff

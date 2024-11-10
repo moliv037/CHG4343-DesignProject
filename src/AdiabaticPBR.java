@@ -16,7 +16,7 @@ public class AdiabaticPBR extends ReactorType implements ODERHS {
             case 1: // dP/dW
                 return -1/2*this.getInputParameters[5]*(this.inputParameters[2]/(P/this.inputParameters[0]))*(1+StaticParameters.getEpsilon()*X);
             case 2: // dT/dW
-                return (-1. * super.returnRateLaw() * this.inputParameters[0]) / StaticParameters.sumFiCpi();
+                return (-1. * super.returnRateLaw(X) * this.inputParameters[0]) / StaticParameters.sumFiCpi();
             default:
                 throw new IllegalArgumentException("Invalid ODE index");
 
