@@ -8,7 +8,7 @@ public abstract class ReactorType {
     //CA_0, FA_0, epsilon, [] theta_reactants, [] theta_products;
 
     //constructor, copy constructor, abstract clone, accessor, mutator, equals, global variable methods
-    public ReactorType (InputParameters input, StaticParameters parameters, Reaction reaction, double k){
+    public ReactorType (InputParameters input, StaticParameters parameters){
         if (input==null)System.exit(0);
         this.input = input.clone();
 
@@ -16,7 +16,6 @@ public abstract class ReactorType {
         this.parameters = parameters.clone();
 
         this.resetGlobalVariables();
-
     }
     public ReactorType (ReactorType source){
         if(source==null)System.exit(0);
@@ -87,9 +86,9 @@ public abstract class ReactorType {
     }
 
     //abstract method headers to be overridden in the children
-    public abstract double[] calculateX (RateLaw rateLaw, double [] inputParameters, double w);
-    public abstract double[] calculateT (RateLaw rateLaw, double [] inputParameters, double w);
-    public abstract double[] calculateP (RateLaw ratelaw, double [] inputParameters, double w);
+    public abstract double[] calculateX (RateLaw rateLaw, Reaction reaction, double w);
+    public abstract double[] calculateT (RateLaw rateLaw, Reaction reaction, double w);
+    public abstract double[] calculateP (RateLaw ratelaw, Reaction reaction, double w);
 
     //parent methods
     protected double returnRateLaw (double X, double P, double T) {

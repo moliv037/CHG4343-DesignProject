@@ -1,16 +1,15 @@
 public class IsothermalPBR extends ReactorType implements ODERHS {
 
     //constructor, copy constructor, clone, equals
-
-    public IsothermalPBR(InputParameters input, StaticParameters parameters, double k)
+    public IsothermalPBR(InputParameters input, StaticParameters parameters)
     {
-        super(input,parameters,k);
+        super(input,parameters);
         this.resetGlobalVariables();
         }
 
     public IsothermalPBR (IsothermalPBR source){
     super(source);
-            }
+    }
 
     public IsothermalPBR clone()
     {
@@ -24,7 +23,7 @@ public class IsothermalPBR extends ReactorType implements ODERHS {
 
     protected void setGlobalVariables(RateLaw rateLaw, Reaction reaction)
     {
-        super.setGlobalVariables((rateLaw), reaction);
+        super.setGlobalVariables(rateLaw, reaction);
     }
 
     public boolean equals (Object comparator) {
@@ -33,8 +32,8 @@ public class IsothermalPBR extends ReactorType implements ODERHS {
     }
 
     //giving concrete definitions to parent methods
-    public double[] calculateX(RateLaw rateLaw, double[] inputParameters, double w) {
-        super.setGlobalVariables (rateLaw, );
+    public double[] calculateX(RateLaw rateLaw, Reaction reaction, double w) {
+        super.setGlobalVariables (rateLaw,reaction);
         double delW = w/1000; //step size
         int maxIt = 1001;
         double tolerance = 0.00001;
@@ -44,13 +43,13 @@ public class IsothermalPBR extends ReactorType implements ODERHS {
         return conversion;
     }
 
-    public double[] calculateT(RateLaw rateLaw, double[] inputParameters, double w) {
+    public double[] calculateT(RateLaw rateLaw, Reaction reaction, double w) {
         double temperature = super.getInput().getT0();
         return new double[] {w,temperature};
     }
 
-    public double[] calculateP(RateLaw ratelaw, double[] inputParameters, double w) {
-        super.setGlobalVariables (ratelaw, );
+    public double[] calculateP(RateLaw ratelaw, Reaction reaction, double w) {
+        super.setGlobalVariables (ratelaw,reaction);
         double delW = w/1000; //step size
         int maxIt = 1001;
         double tolerance = 0.00001;
