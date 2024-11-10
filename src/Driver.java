@@ -142,9 +142,6 @@ public class Driver {
         System.out.println("Please enter either adiabatic or isothermal for the type of reactor:");
         type=scanner.next();
 
-        InputParameters inputs = new InputParameters(double[] params, String type);
-        Reaction rxn = new Reaction()
-
 
 // Rest of code for output
         //code is missing value checks
