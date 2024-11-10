@@ -39,14 +39,14 @@ public class RateLaw {
         return true;
     }//end of equals
 
-    public double calculateRateLaw (double X, double P, double T){
+    public double calculateRateLaw (double X, double P, double T){ //****returns ra not -ra
         double rate;
         double concProduct =1; //product of concentrations
         double k_rate=0; //k value used in rate law
 
         if (input.getType() == "isothermal"){
             k_rate = input.getK_T0();}
-        else if (input.getType() == "adiabatic"){
+        else {
             k_rate = input.getK_T0()*Math.exp((input.getE()/8.3145)*((1/input.getT0())-(1/T)));
         }
 

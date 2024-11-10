@@ -2,8 +2,6 @@ public class Reaction {
   private InputParameters input;
   private StaticParameters parameters;
 
-
-
   public Reaction(InputParameters input, StaticParameters parameters) {
     this.input = input.clone();
     this.parameters = parameters.clone(); //when we create reaction in drive we add input, parameters
