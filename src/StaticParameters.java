@@ -34,8 +34,10 @@ public class StaticParameters {
     private double [] theta_products;
 
 
-    public StaticParameters (int numberReactants, int numberProducts, int numberInerts, double CA_0, double FA_0, double epsilon,double [] reactantMoleFracs, double [] productMoleFracs, double [] inertMoleFracs, double[] reactantHeatCapacities, double[] productHeatCapacities, double[] inertHeatCapacities, double [] theta_reactants, double [] theta_products) {
+    public StaticParameters (InputParameters input,int numberReactants, int numberProducts, int numberInerts, double CA_0, double FA_0, double epsilon, int [] reactantCoefficients, int [] productCoefficients, int [] inertCoefficients, double [] reactantMoleFracs, double [] productMoleFracs, double [] inertMoleFracs, double[] reactantHeatCapacities, double[] productHeatCapacities, double[] inertHeatCapacities, double [] theta_reactants, double [] theta_products) {
+        if (input == null) System.exit(0);
         if (numberReactants <= 0 || numberProducts <= 0 || numberInerts < 0) System.exit(0);
+        this.input = input;
         this.numberReactants = numberReactants;
         this.numberProducts = numberProducts;
         this.numberInerts = numberInerts;
@@ -46,12 +48,21 @@ public class StaticParameters {
         this.epsilon = epsilon; //epsilon can be 0, negative, or positive
 
         //check array is not null
+        if (reactantCoefficients==null) System.exit(0);
+        if (productCoefficients==null) System.exit(0);
+        if (inertCoefficients==null) System.exit(0);
         if(reactantMoleFracs==null) System.exit(0);
         if(productMoleFracs==null) System.exit(0);
         if(inertMoleFracs==null) System.exit(0);
         if(reactantHeatCapacities==null) System.exit(0);
         if(productHeatCapacities==null) System.exit(0);
         if(inertHeatCapacities==null) System.exit(0);
+
+        //check that the arrays cant have 0 elements
+        if(reactantCoefficients.length == 0 || productCoefficients.length == 0||inertCoefficients.length==0) System.exit(0); //need coefficients
+        if (reactantMoleFracs.length == 0 || productMoleFracs.length == 0 || inertMoleFracs.length==0) System.exit(0);
+        if(reactantHeatCapacities.length == 0 || productHeatCapacities.length == 0 || inertHeatCapacities.length==0) System.exit(0);
+
 
 
         //check that no mole fraction or heat capacities are smaller than 0
@@ -289,10 +300,8 @@ public class StaticParameters {
         }
         return thetas;
     }
-/*Array FICPI need to create private instance varaible and starting X0=0 in inpputparameters
 
-    private double [] theta_reactants;
-    private double [] theta_products;*/
+/*Need to add equals then done class and fix related problems */
 
 }//end of class
 
