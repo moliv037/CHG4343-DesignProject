@@ -20,7 +20,8 @@ public class StaticParameters {
     private double CA_0;
     private double FA_0;
     private double epsilon;
-    private double
+    private double [] theta_reactants;
+    private double [] theta_products;
 
 
 
