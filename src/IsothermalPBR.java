@@ -3,29 +3,60 @@ public class IsothermalPBR extends ReactorType implements ODERHS {
 
     //constructor, copy constructor, clone, equals
 
+    public IsothermalPBR(InputParameters input, StaticParameters parameters, double k)
+    {
+        super(input,parameters,k);
+        this.resetGlobalVariables();
+        }
+
+    public IsothermalPBR (IsothermalPBR source){
+    super(source);
+            }
+
+    public IsothermalPBR clone()
+    {
+        return new IsothermalPBR(this);
+    }
+
+    protected void resetGlobalVariables()
+    {
+        super.resetGlobalVariables();
+    }
+
+    protected void setGlobalVariables(RateLaw rateLaw)
+    {
+        super.setGlobalVariables((rateLaw));
+    }
+
+    public boolean equals (Object comparator) {
+        if (!super.equals(comparator))return false;
+        return true;
+    }
+
     //giving concrete definitions to parent methods
-    public double calculateX(RateLaw rateLaw, double[] inputParameters, double w) {
+    public double[] calculateX(RateLaw rateLaw, double[] inputParameters, double w) {
         super.setGlobalVariables (rateLaw);
         double delW = w/1000; //step size
         int maxIt = 1001;
         double tolerance = 0.00001;
 
-        double conversion = ODESolver.euler(0.0, w, 0.0, delW, maxIt, this, 0, tolerance );
+        double[] conversion = ODESolver.euler(0.0, w, new double[]{0.0}, delW, maxIt, this, 0, tolerance );
         super.resetGlobalVariables();
         return conversion;
     }
 
-    public double calculateT(RateLaw rateLaw, double[] inputParameters, double w) {
-       return inputParameters[1];
+    public double[] calculateT(RateLaw rateLaw, double[] inputParameters, double w) {
+        double temperature = super.getInput().getT0();
+        return new double[] {w,temperature};
     }
 
-    public double calculateP(RateLaw ratelaw, double[] inputParameters, double w) {
-        super.setGlobalVariables (rateLaw);
+    public double[] calculateP(RateLaw ratelaw, double[] inputParameters, double w) {
+        super.setGlobalVariables (ratelaw);
         double delW = w/1000; //step size
         int maxIt = 1001;
         double tolerance = 0.00001;
 
-        double pressure = ODESolver.euler(0.0, w, 0.0, delW, maxIt, this, 1, tolerance );
+        double [] pressure = ODESolver.euler(0.0, w, new double[]{0.0}, delW, maxIt, this, 1, tolerance );
         super.resetGlobalVariables();
         return pressure;
     }
@@ -37,10 +68,10 @@ public class IsothermalPBR extends ReactorType implements ODERHS {
 
         switch (odeIndex) {
             case 0: // dX/dW
-                return -1. * super.returnRateLaw(X) / super.getStaticParameters().getFA_0();
+                return -1. * super.returnRateLaw(X) / super.getParameters().getFA_0();
             //parameter list in calculateRate will need to be updated once that method is defined
             case 1: // dP/dW
-                return -1/2*super.getInputParameters().getAlpha()*(super.getInputParameters().getP0()/(P/super.getInputParameters().getP0()))*(1+super.getStaticParameters().getEpsilon()*X);
+                return -1/2*super.getInput().getAlpha()*(super.getInput().getP0()/(P/super.getInput().getP0()))*(1+super.getParameters().getEpsilon()*X);
             default:
                 throw new IllegalArgumentException("Invalid ODE index");
         }

@@ -1,11 +1,11 @@
 public class ODESolver {
 
-    public static double euler(double w_0, double w_f, double[] y_0, double delW, int maxIt, ODERHS f, int odeIndex, double tolerance) {
-        double w = w_0;
-        double y = y_0[odeIndex];  //start with the initial value for the specified ODE
-        double[] y_i = y_0.clone();  //creates a copy of the initial values
+    public static double [] euler(double w_0, double w_f, double[] y_0, double delW, int maxIt, ODERHS f, int odeIndex, double tolerance) {
+        double w = w_0; //setting the initial value of the independent variable
+        double y = y_0[odeIndex];  //setting the initial value of the dependent variable for the specified ODE
+        double[] y_i = y_0.clone();  //creates a copy of the initial independent values
 
-        int i = 0;
+        int i = 0; //starting iteration count at zero
         double y_previous = y; //stores previous value of y to calculate convergence
 
         while (w < w_f && i < maxIt) {
@@ -15,7 +15,7 @@ public class ODESolver {
 
             //checks for convergence based on tolerance
             if (Math.abs(y-y_previous) < tolerance) {
-                System.out.println("Convergence achieved within tolerance.");
+                System.out.println("Convergence achieved within tolerance");
                 break; //exit the loop when convergence is reached
             }
             y_previous = y; //update value
@@ -24,9 +24,9 @@ public class ODESolver {
         }
 
         if (i >= maxIt) {
-            System.out.println("Warning: Maximum iterations reached before reaching w_f.");
+            System.out.println("Warning: Maximum iterations reached before reaching w_f");
         }
 
-        return y;  //return the final value of the dependent variable for the specified ODE
+        return new double[] {w,y};  //returns an array containing the final values of the dependent and independent variables
     }
 } //end of class
