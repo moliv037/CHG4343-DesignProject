@@ -13,6 +13,12 @@ public class ODESolver {
             y = y + delW * dydw;  //euler step for the dependent variable
             y_i[odeIndex] = y; //update the value of the dependent variable for the specified ODE in the state array
 
+            //checks for convergence based on tolerance
+            if (Math.abs(y-y_previous) < tolerance) {
+                System.out.println("Convergence achieved within tolerance.");
+                break;
+            }
+            y_previous = y; //update value
             w = w + delW; //euler step for the independent variable
             i++;
         }

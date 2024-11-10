@@ -8,8 +8,9 @@ public class IsothermalPBR extends ReactorType implements ODERHS {
         super.setGlobalVariables (rateLaw);
         double delW = w/1000; //step size
         int maxIt = 1001;
+        double tolerance = 0.00001;
 
-        double conversion = ODESolver.euler(0.0, w, 0.0, delW, maxIt, this, 0, );
+        double conversion = ODESolver.euler(0.0, w, 0.0, delW, maxIt, this, 0, tolerance );
         super.resetGlobalVariables();
         return conversion;
     }
@@ -22,8 +23,9 @@ public class IsothermalPBR extends ReactorType implements ODERHS {
         super.setGlobalVariables (rateLaw);
         double delW = w/1000; //step size
         int maxIt = 1001;
+        double tolerance = 0.00001;
 
-        double pressure = ODESolver.euler(0.0, w, 0.0, delW, maxIt, this, 1, );
+        double pressure = ODESolver.euler(0.0, w, 0.0, delW, maxIt, this, 1, tolerance );
         super.resetGlobalVariables();
         return pressure;
     }
