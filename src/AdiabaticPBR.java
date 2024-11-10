@@ -47,7 +47,7 @@ public class AdiabaticPBR extends ReactorType implements ODERHS {
             case 1: // dP/dW
                 return -1/2*super.getInput().getAlpha()*(super.getInput().getP0()/(P/super.getInput().getP0()))*(1+super.getParameters().getEpsilon()*X);
             case 2: // dT/dW
-                return (-1. * super.returnRateLaw(X,P,T) * super.getInput().getDelH_rx()) / super.returnFiCpi(X).FiCpi();
+                return (-1. * super.returnRateLaw(X,P,T) * super.getInput().getDelH_rx()) / super.returnFiCpi(X);
             default:
                 throw new IllegalArgumentException("Invalid ODE index");
 
