@@ -39,7 +39,7 @@ public class RateLaw {
         return true;
     }//end of equals
 
-    public double calculateRateLaw (double X, double P, double T){
+    public double calculateRateLaw (double X, double P, double T){ //****returns ra not -ra
         double rate;
         double concProduct =1; //product of concentrations
         double k_rate=0; //k value used in rate law
