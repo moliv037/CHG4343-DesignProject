@@ -5,6 +5,6 @@ public abstract class RateLaw {
 
     public abstract double calculateRateConstant (double [] inputParameters);
 
-    public abstract double calculateRate (double k);
+    public abstract double calculateRate (double k, double X);
 
 }
