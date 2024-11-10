@@ -20,21 +20,20 @@ public class StaticParameters {
     private double CA_0;
     private double FA_0;
     private double epsilon;
-    private double [] theta_reactants;
-    private double [] theta_products;
+    private double
 
 
 
 
-public double getCA_0 (double [] reactantMoleFracs, double [] inputParameters){
+public static double calculateCA_0 (double [] reactantMoleFracs, double [] inputParameters){
    // here R = 0.08206 [L*atm/mol/K]
     return (reactantMoleFracs[0]*inputParameters[2])/(0.0826*inputParameters[1]);
 }
 
-public double getFA_0 (double [] reactantMoleFracs, double [] inputParameters){
+public static double getFA_0 (double [] reactantMoleFracs, double [] inputParameters){
     return (reactantMoleFracs[0]*inputParameters[2]*inputParameters[6])/(0.0826*inputParameters[1]);
 }
-public double getEpsilon (int[] reactantCoefficients, int[] productCoefficients, double [] reactantMoleFracs){
+public static double getEpsilon (int[] reactantCoefficients, int[] productCoefficients, double [] reactantMoleFracs){
     double deltaProducts=0.;
     double deltaReactants = 0.;
     double a = reactantCoefficients[0]; //the coefficient of the limiting reactant is [0]
