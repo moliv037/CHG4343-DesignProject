@@ -35,19 +35,29 @@ public class StaticParameters {
         this.epsilon = epsilon; //epsilon can be 0, negative, or positive
     }//constructor, need to add throw exceptions
 
-    public StaticParameters(double [] reactantMoleFracs, double [] productMoleFracs, double [] inertMoleFracs) {
+    public StaticParameters (double [] reactantMoleFracs, double [] productMoleFracs, double [] inertMoleFracs, double[] reactantHeatCapacities, double[] productHeatCapacities, double[] inertHeatCapacities) {
        //check array is not null
         if(reactantMoleFracs==null) System.exit(0);
         if(productMoleFracs==null) System.exit(0);
         if(inertMoleFracs==null) System.exit(0);
+        if(reactantHeatCapacities==null) System.exit(0);
+        if(productHeatCapacities==null) System.exit(0);
+        if(inertHeatCapacities==null) System.exit(0);
 
-        //check that no mole fraction is smaller than 0
+        //check that no mole fraction or heat capacities are smaller than 0
         for (int i = 0; i < reactantMoleFracs.length; i++) {
             if (reactantMoleFracs[i] < 0.) System.exit(0);}
         for (int i = 0; i < productMoleFracs.length; i++) {
             if (productMoleFracs[i] < 0.) System.exit(0);}
         for (int i = 0; i < inertMoleFracs.length; i++) {
             if (inertMoleFracs[i] < 0.) System.exit(0);}
+        for (int i = 0; i < reactantHeatCapacities.length; i++)
+            if (reactantHeatCapacities[i] < 0.) System.exit(0);
+        for (int i = 0; i < productHeatCapacities.length; i++)
+            if (productHeatCapacities[i] < 0.) System.exit(0);
+        for (int i = 0; i < inertHeatCapacities.length; i++)
+            if (inertHeatCapacities[i] < 0.) System.exit(0);
+
 
         //check that the sum of mole fractions in and out are 1
         for (int i=0; i < reactantMoleFracs.length; i++) {
@@ -59,14 +69,19 @@ public class StaticParameters {
             sum += productMoleFracs[i] + inertMoleFracs[i];
             if (sum != 1.0) System.exit(0);}
 
-        for (int j=0; j < reactantMoleFracs.length; j++)
-            this.reactantMoleFracs[j]=reactantMoleFracs[j];
-        for (int i=0; i < productMoleFracs.length; i++)
-            this.productMoleFracs[i]=productMoleFracs[i];
-        for (int i=0; i < inertMoleFracs.length; i++)
-            this.inertMoleFracs[i]=inertMoleFracs[i];
+        for (int j=0; j < reactantMoleFracs.length; j++) this.reactantMoleFracs[j]=reactantMoleFracs[j];
+        for (int i=0; i < productMoleFracs.length; i++) this.productMoleFracs[i]=productMoleFracs[i];
+        for (int i=0; i < inertMoleFracs.length; i++) this.inertMoleFracs[i]=inertMoleFracs[i];
+        for (int i=0; i < reactantHeatCapacities.length; i++) this.reactantHeatCapacities[i]=reactantHeatCapacities[i];
+        for (int i=0; i < productHeatCapacities.length; i++) this.productHeatCapacities[i]=productHeatCapacities[i];
+        for (int i=0; i<inertHeatCapacities.length; i++) this.inertHeatCapacities[i]=inertHeatCapacities[i];
 
     }//constructor, need to add throw exceptions
+
+
+
+
+
 
 
 
