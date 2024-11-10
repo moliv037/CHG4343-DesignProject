@@ -5,16 +5,20 @@ public abstract class ReactorType {
     // [] reactantCoefficients,[] productCoefficients,[] inertCoefficients,[] reactantMoleFracs,[] productMoleFracs,[] inertMoleFracs
     // [] reactantHeatCapacities, [] productHeatCapacities, [] inertHeatCapacities;
     //CA_0, FA_0, epsilon, [] theta_reactants, [] theta_products;
+    private Reaction reaction;
     private double k;
 
 
     //constructor, copy constructor, abstract clone, accessor, mutator, equals, global variable methods
-    public ReactorType (InputParameters input, StaticParameters parameters, double k){
+    public ReactorType (InputParameters input, StaticParameters parameters, Reaction reaction, double k){
         if (input==null)System.exit(0);
         this.input = input.clone();
 
         if (parameters==null)System.exit(0);
         this.parameters = parameters.clone();
+
+        if(reaction==null)System.exit(0);
+        this.reaction = reaction.clone();
 
         if (k<0.)System.exit(0);
         this.k = k;
@@ -26,6 +30,7 @@ public abstract class ReactorType {
         if(source==null)System.exit(0);
         this.input=source.input.clone();
         this.parameters=source.parameters.clone();
+        this.reaction=source.reaction.clone();
         this.k=source.k;
         
         if(source.g_rateLaw==null)this.g_rateLaw=null;
@@ -47,14 +52,16 @@ public abstract class ReactorType {
 
     public InputParameters getInput()
     {
-        input=this.input.clone();
-        return this.input;
+        return this.input.clone();
     }
 
     public StaticParameters getParameters()
     {
-        parameters=this.parameters.clone();
-        return this.parameters;
+        return this.parameters.clone();
+    }
+
+    public Reaction getReaction() {
+        return this.reaction.clone();
     }
 
     public double getK()
@@ -81,6 +88,12 @@ public boolean setK(double k)
     {
         if(parameters==null)return false;
         this.parameters=parameters.clone();
+        return true;
+    }
+
+    public boolean setReaction (Reaction reaction) {
+        if(reaction==null)return false;
+        this.reaction=reaction.clone();
         return true;
     }
 
