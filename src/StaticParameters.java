@@ -23,7 +23,8 @@ public class StaticParameters {
     private double [] theta_reactants;
     private double [] theta_products;
 
-    public StaticParameters(int numberReactants, int numberProducts, int numberInerts, double CA_0, double FA_0, double epsilon) {
+
+    public StaticParameters (int numberReactants, int numberProducts, int numberInerts, double CA_0, double FA_0, double epsilon,double [] reactantMoleFracs, double [] productMoleFracs, double [] inertMoleFracs, double[] reactantHeatCapacities, double[] productHeatCapacities, double[] inertHeatCapacities, double [] theta_reactants, double [] theta_products) {
         if (numberReactants <= 0 || numberProducts <= 0 || numberInerts < 0) System.exit(0);
         this.numberReactants = numberReactants;
         this.numberProducts = numberProducts;
@@ -33,16 +34,15 @@ public class StaticParameters {
         this.FA_0 = FA_0;
 
         this.epsilon = epsilon; //epsilon can be 0, negative, or positive
-    }//constructor, need to add throw exceptions
 
-    public StaticParameters (double [] reactantMoleFracs, double [] productMoleFracs, double [] inertMoleFracs, double[] reactantHeatCapacities, double[] productHeatCapacities, double[] inertHeatCapacities) {
-       //check array is not null
+        //check array is not null
         if(reactantMoleFracs==null) System.exit(0);
         if(productMoleFracs==null) System.exit(0);
         if(inertMoleFracs==null) System.exit(0);
         if(reactantHeatCapacities==null) System.exit(0);
         if(productHeatCapacities==null) System.exit(0);
         if(inertHeatCapacities==null) System.exit(0);
+
 
         //check that no mole fraction or heat capacities are smaller than 0
         for (int i = 0; i < reactantMoleFracs.length; i++) {
@@ -69,14 +69,67 @@ public class StaticParameters {
             sum += productMoleFracs[i] + inertMoleFracs[i];
             if (sum != 1.0) System.exit(0);}
 
+        this.reactantMoleFracs = new double[reactantMoleFracs.length];
         for (int j=0; j < reactantMoleFracs.length; j++) this.reactantMoleFracs[j]=reactantMoleFracs[j];
+        this.productMoleFracs = new double[productMoleFracs.length];
         for (int i=0; i < productMoleFracs.length; i++) this.productMoleFracs[i]=productMoleFracs[i];
-        for (int i=0; i < inertMoleFracs.length; i++) this.inertMoleFracs[i]=inertMoleFracs[i];
+        this.inertMoleFracs = new double[inertMoleFracs.length];
+        for (int i=0; i < inertMoleFracs.length; i++) this.inertMoleFracs[i]= inertMoleFracs[i];
+        this.reactantHeatCapacities = new double[reactantHeatCapacities.length];
         for (int i=0; i < reactantHeatCapacities.length; i++) this.reactantHeatCapacities[i]=reactantHeatCapacities[i];
+        this.productHeatCapacities = new double[productHeatCapacities.length];
         for (int i=0; i < productHeatCapacities.length; i++) this.productHeatCapacities[i]=productHeatCapacities[i];
+        this.inertHeatCapacities = new double[inertHeatCapacities.length];
         for (int i=0; i<inertHeatCapacities.length; i++) this.inertHeatCapacities[i]=inertHeatCapacities[i];
 
+       //check that arrays are not null
+        if (theta_reactants==null) System.exit(0);
+        if (theta_products==null) System.exit(0);
+
+        //check that theta is not negative (they can be 0)
+        for (int i = 0; i < theta_reactants.length; i++) if (theta_reactants[i] < 0.) System.exit(0);
+        for (int i=0; i<theta_products.length; i++) if (theta_products[i] < 0.) System.exit(0);
+
+        this.theta_reactants = new double[theta_reactants.length];
+        for (int i = 0; i < theta_reactants.length; i++)  this.theta_reactants [i] = theta_reactants[i];
+        this.theta_products = new double[theta_products.length];
+        for (int i = 0; i < theta_products.length; i++) this.theta_products[i] = theta_products[i];
+
     }//constructor, need to add throw exceptions
+
+    public StaticParameters (StaticParameters source){
+        if (source == null) System.exit(0);
+        this.numberReactants = source.numberReactants;
+        this.numberProducts = source.numberProducts;
+        this.numberInerts = source.numberInerts;
+        this.CA_0 = source.CA_0;
+        this.FA_0 = source.FA_0;
+        this.epsilon = source.epsilon;
+
+        this.reactantMoleFracs = new double [source.reactantMoleFracs.length];
+        for (int i; i<reactantMoleFracs.length; i++) this.reactantMoleFracs[i]=source.reactantMoleFracs[i];
+        this.productMoleFracs = new double [source.productMoleFracs.length];
+        for (int i; i<productMoleFracs.length;i++) this.productMoleFracs[i]=source.productMoleFracs[i];
+        this.inertMoleFracs = new double [source.inertMoleFracs.length];
+        for (int i; i<inertMoleFracs.length;i++) this.inertMoleFracs[i]=source.inertMoleFracs[i];
+        this.reactantHeatCapacities = new double[source.reactantHeatCapacities.length];
+        for (int i; i<reactantHeatCapacities.length;i++) this.reactantHeatCapacities[i] = source.reactantHeatCapacities[i];
+        this.productHeatCapacities = new double[source.productHeatCapacities.length];
+        for (int i; i<productHeatCapacities.length;i++) this.productHeatCapacities[i]=source.productHeatCapacities[i];
+        this.inertHeatCapacities = new double[source.inertHeatCapacities.length];
+        for (int i; i<inertHeatCapacities;i++) this.inertHeatCapacities[i]=source.inertHeatCapacities[i];
+
+        this.theta_reactants = new double [source.theta_reactants.length];
+        for (int i; i<theta_reactants.length; i++) this.theta_reactants[i] = source.theta_reactants [i];
+        this.theta_products = new double [source.theta_products.length];
+        for (int i; i<theta_products.length;i++) this.theta_products [i] = source.theta_products [i];
+
+    }//copy constructor,
+
+    public StaticParameters clone() {return new StaticParameters(this);} //clone
+
+    public
+
 
 
 
