@@ -208,7 +208,7 @@ public class StaticParameters {
         for (int i = 0; i < theta_reactants.length; i++)  this.theta_reactants [i] = theta_reactants[i];
         this.theta_products = new double[theta_products.length];
         for (int i = 0; i < theta_products.length; i++) this.theta_products[i] = theta_products[i];
-
+        return true;
     }//mutator, need to add throw exceptions
 
     public int getNumberReactants (){return this.numberReactants;}
