@@ -288,7 +288,7 @@ public class StaticParameters {
         return true;
     }//mutator, need to add throw exceptions
 
-
+    public InputParameters getInput () {return this.input.clone();}
     public int getNumberReactants (){return this.numberReactants;}
     public int getNumberProducts (){return this.numberProducts;}
     public int getNumberInerts (){return this.numberInerts;}
