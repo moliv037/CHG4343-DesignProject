@@ -46,7 +46,7 @@ public class RateLaw {
 
         if (input.getType() == "isothermal"){
             k_rate = input.getK_T0();}
-        else if (input.getType() == "adiabatic"){
+        else {
             k_rate = input.getK_T0()*Math.exp((input.getE()/8.3145)*((1/input.getT0())-(1/T)));
         }
 
