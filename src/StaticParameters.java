@@ -5,11 +5,22 @@
 public class StaticParameters {
 
     private int numberReactants;
+    private int numberProducts;
+    private int numberInerts;
     private int [] reactantCoefficients;
-    private double [] reactantHeatCapacities;
-
+    private int [] productCoefficients;
+    private int [] inertCoefficients;
     private double [] reactantMoleFracs;
- private double [] productMoleFracs;
+    private double [] productMoleFracs;
+    private double [] inertMoleFracs;
+    private double [] reactantHeatCapacities;
+    private double [] productHeatCapacities;
+    private double [] inertHeatCapacities;
+
+    private double CA_0;
+    private double FA_0;
+    private double epsilon;
+    private double
 
 
 
