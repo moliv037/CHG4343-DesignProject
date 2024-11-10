@@ -1,7 +1,38 @@
 public class AdiabaticPBR extends ReactorType implements ODERHS {
 
-    //giving concrete definitions to parent methods
+    //constructor, copy constructor, clone, equals
+    public AdiabaticPBR(InputParameters input, StaticParameters parameters, double k)
+    {
+        super(input,parameters,k);
+        this.resetGlobalVariables();
+    }
 
+    public AdiabaticPBR(IsothermalPBR source){
+        super(source);
+    }
+
+    public IsothermalPBR clone()
+    {
+        return new AdiabaticPBR (this);
+
+    }
+
+    protected void resetGlobalVariables()
+    {
+        super.resetGlobalVariables();
+    }
+
+    protected void setGlobalVariables(RateLaw rateLaw)
+    {
+        super.setGlobalVariables((rateLaw));
+    }
+
+    public boolean equals (Object comparator) {
+        if (!super.equals(comparator))return false;
+        return true;
+    }
+
+    //giving concrete definitions to parent methods
     //giving concrete definition to interface method
 
     public double returnODERHS (double w, double [] y, int odeIndex) {
@@ -16,7 +47,7 @@ public class AdiabaticPBR extends ReactorType implements ODERHS {
             case 1: // dP/dW
                 return -1/2*super.getInput().getAlpha()*(super.getInput().getP0()/(P/super.getInput().getP0()))*(1+super.getParameters().getEpsilon()*X);
             case 2: // dT/dW
-                return (-1. * super.returnRateLaw(X) * super.getInput().getDelH_rx()) / super.getParameters().FiCpi();
+                return (-1. * super.returnRateLaw(X) * super.getInput().getDelH_rx()) / super.returnFiCpi().FiCpi();
             default:
                 throw new IllegalArgumentException("Invalid ODE index");
 

@@ -1,5 +1,4 @@
 public class IsothermalPBR extends ReactorType implements ODERHS {
-    private double[] inputParameters;
 
     //constructor, copy constructor, clone, equals
 

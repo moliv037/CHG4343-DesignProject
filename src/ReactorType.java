@@ -103,8 +103,11 @@ public boolean setK(double k)
     public abstract double[] calculateP (RateLaw ratelaw, double [] inputParameters, double w);
 
     //parent method
-    protected double returnRateLaw (double X) {
+    public double returnRateLaw (double X) {
         if (this.g_rateLaw == null) System.exit(0); //this will eventually be replaced with a thrown exception
         return this.g_rateLaw.calculateRate(this.k, X);
+    }
+    public double returnFiCpi(double X) {
+        //fill in code
     }
 }
