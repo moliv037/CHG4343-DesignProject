@@ -1,4 +1,4 @@
-//The StaticParameters class calculates all the variables that are used in other classes but do not change, notably the initial conditions.
+//The StaticParameters class calculates all the variables that are used in other classes that do not change, notably the initial conditions.
 //This class will pass the necessary checks to the "static" parameters instead of doing it in the driver class.
 //To access these parameters, create an object of the StaticParameter class and use .getVariable().
 
