@@ -58,25 +58,24 @@ public double [] reactantConcentrations (double X, double P, double T){
     return rxnConc;
   }
 
-  private double
+  private double calculate_FiCPi (double X){
+    double FA_0= parameters.getFA_0();
+    double a = parameters.getReactantCoefficients()[0];
+    double yA_0 = parameters.getReactantMoleFracs()[0];
+    double reactants =0.; //sum of Fi*Cpi of reactants
+    double products = 0.; //sum of Fi*Cpi of products
+    double inerts =0.; //sum of Fi*Cpi of inerts
 
+    for (int i=0; i< parameters.getNumberReactants();i++){
+      reactants += ((FA_0*(parameters.getTheta_reactants()[i])-((parameters.getReactantCoefficients()[i]/a)* X))* parameters.getProductHeatCapacities()[i]);}
 
-  /*private static final double R=8.314; //in J/mol*K
-  input : object to access T0, P0, k_T0, E, alpha, V_0 and type
-  parameters : object to access numberReactants,numberProducts, numberInerts,
-  [] reactantCoefficients,[] productCoefficients,[] inertCoefficients,[] reactantMoleFracs,[] productMoleFracs,[] inertMoleFracs
-  [] reactantHeatCapacities, [] productHeatCapacities, [] inertHeatCapacities;
-  CA_0, FA_0, epsilon, [] theta_reactants, [] theta_products; */
+    for (int i=0; i< parameters.getNumberProducts();i++){
+      products += ((FA_0*(parameters.getTheta_products()[i])+((parameters.getProductCoefficients()[i]/a)* X))* parameters.getProductHeatCapacities()[i]);}
 
-  //The goal of this class is to create methods that return arrays that calculate concentrations for reactants and products, and for FiCpi.
+    for (int i=0; i< parameters.getNumberInerts();i++){
+      inerts += ((parameters.getInertMoleFracs()[i]/yA_0)*parameters.getInertHeatCapacities()[i]);}
 
-  /*public double [] calculateInitalConcentrations(InputParameters params){
-    double[] InitialConcentrations=new double[numberReactants]; 
-    double P0=params.getP0(); 
-    double T0-params.getT0();
-    //number of reactants? 
-    for (int i=0; I < numberReactants; i++) {
-      InitialConcentrations[i]= */
-
+    return (reactants+products+inerts);
+  }
 
 }//end of class
