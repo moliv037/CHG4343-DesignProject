@@ -22,9 +22,9 @@ public class IsothermalPBR extends ReactorType implements ODERHS {
         super.resetGlobalVariables();
     }
 
-    protected void setGlobalVariables(RateLaw rateLaw)
+    protected void setGlobalVariables(RateLaw rateLaw, Reaction reaction)
     {
-        super.setGlobalVariables((rateLaw));
+        super.setGlobalVariables((rateLaw), reaction);
     }
 
     public boolean equals (Object comparator) {
@@ -34,7 +34,7 @@ public class IsothermalPBR extends ReactorType implements ODERHS {
 
     //giving concrete definitions to parent methods
     public double[] calculateX(RateLaw rateLaw, double[] inputParameters, double w) {
-        super.setGlobalVariables (rateLaw);
+        super.setGlobalVariables (rateLaw, );
         double delW = w/1000; //step size
         int maxIt = 1001;
         double tolerance = 0.00001;
@@ -50,7 +50,7 @@ public class IsothermalPBR extends ReactorType implements ODERHS {
     }
 
     public double[] calculateP(RateLaw ratelaw, double[] inputParameters, double w) {
-        super.setGlobalVariables (ratelaw);
+        super.setGlobalVariables (ratelaw, );
         double delW = w/1000; //step size
         int maxIt = 1001;
         double tolerance = 0.00001;
@@ -64,13 +64,14 @@ public class IsothermalPBR extends ReactorType implements ODERHS {
     public double returnODERHS(double w, double[] y, int odeIndex) {
         double X = y[0];
         double P = y[1];
+        double T = super.getInput().getT0();
 
         switch (odeIndex) {
             case 0: // dX/dW
-                return -1. * super.returnRateLaw(X) / super.getParameters().getFA_0();
+                return -1. * super.returnRateLaw(X,P,T) / super.getParameters().getFA_0();
             //parameter list in calculateRate will need to be updated once that method is defined
             case 1: // dP/dW
-                return -1/2*super.getInput().getAlpha()*(super.getInput().getP0()/(P/super.getInput().getP0()))*(1+super.getParameters().getEpsilon()*X);
+                return -1./2.*super.getInput().getAlpha()*(super.getInput().getP0()/(P/super.getInput().getP0()))*(1+super.getParameters().getEpsilon()*X);
             default:
                 throw new IllegalArgumentException("Invalid ODE index");
         }

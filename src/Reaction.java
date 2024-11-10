@@ -58,7 +58,7 @@ public double [] reactantConcentrations (double X, double P, double T){
     return rxnConc;
   }
 
-  private double calculate_FiCPi (double X){
+  public double calculate_FiCPi(double X){
     double FA_0= parameters.getFA_0();
     double a = parameters.getReactantCoefficients()[0];
     double yA_0 = parameters.getReactantMoleFracs()[0];

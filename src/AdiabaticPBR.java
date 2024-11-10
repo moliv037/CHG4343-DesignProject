@@ -22,9 +22,9 @@ public class AdiabaticPBR extends ReactorType implements ODERHS {
         super.resetGlobalVariables();
     }
 
-    protected void setGlobalVariables(RateLaw rateLaw)
+    protected void setGlobalVariables(RateLaw rateLaw, Reaction reaction)
     {
-        super.setGlobalVariables((rateLaw));
+        super.setGlobalVariables((rateLaw), reaction);
     }
 
     public boolean equals (Object comparator) {
@@ -42,12 +42,12 @@ public class AdiabaticPBR extends ReactorType implements ODERHS {
 
         switch (odeIndex) {
             case 0: // dX/dW
-                return -1. * super.returnRateLaw(X) / super.getParameters().getFA_0();
+                return -1. * super.returnRateLaw(X,P,T) / super.getParameters().getFA_0();
             //parameter list in calculateRate will need to be updated once that method is defined
             case 1: // dP/dW
                 return -1/2*super.getInput().getAlpha()*(super.getInput().getP0()/(P/super.getInput().getP0()))*(1+super.getParameters().getEpsilon()*X);
             case 2: // dT/dW
-                return (-1. * super.returnRateLaw(X) * super.getInput().getDelH_rx()) / super.returnFiCpi().FiCpi();
+                return (-1. * super.returnRateLaw(X,P,T) * super.getInput().getDelH_rx()) / super.returnFiCpi(X).FiCpi();
             default:
                 throw new IllegalArgumentException("Invalid ODE index");
 
