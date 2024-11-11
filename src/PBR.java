@@ -29,5 +29,5 @@ public class PBR {
         if (!((PBR)comparator).reactorType.equals(this.reactorType)) isEquals=false;
         return isEquals;
     }
-
+//other methods
 }
