@@ -38,14 +38,14 @@ public class IsothermalPBR extends ReactorType implements ODERHS {
         int maxIt = 1001;
         double tolerance = 0.00001;
 
-        double[] conversion = ODESolver.euler(0.0, w, new double[]{0.0}, delW, maxIt, this, 0, tolerance );
+        double[] conversion = ODESolver.euler(0.0, w, new double[]{0.,0.,0.}, delW, maxIt, this, 0, tolerance );
         super.resetGlobalVariables();
         return conversion;
     }
 
     public double[] calculateT(RateLaw rateLaw, Reaction reaction, double w) {
         double temperature = super.getInput().getT0();
-        return new double[] {w,temperature};
+        return new double[] {w,temperatur};
     }
 
     public double[] calculateP(RateLaw ratelaw, Reaction reaction, double w) {
@@ -54,7 +54,7 @@ public class IsothermalPBR extends ReactorType implements ODERHS {
         int maxIt = 1001;
         double tolerance = 0.00001;
 
-        double [] pressure = ODESolver.euler(0.0, w, new double[]{0.0}, delW, maxIt, this, 1, tolerance );
+        double [] pressure = ODESolver.euler(0.0, w, new double[]{0.,0.,0.}, delW, maxIt, this, 1, tolerance );
         super.resetGlobalVariables();
         return pressure;
     }
