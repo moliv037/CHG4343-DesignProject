@@ -44,7 +44,7 @@ public class IsothermalPBR extends ReactorType implements ODERHS {
     }
 
     public double[] calculateT(RateLaw rateLaw, Reaction reaction, double w) {
-        double temperature = super.getInput().getT0();
+        double temperature = super.getInput().getT0();re
         return new double[] {w,temperature};
     }
 

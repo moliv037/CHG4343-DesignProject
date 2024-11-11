@@ -23,7 +23,8 @@ public class ODESolver {
                 if (Math.abs(y_i[currentODE] - y_prev[currentODE]) > tolerance) {
                 converged = false;
                 break;
-            }}
+            }
+            }
             if (converged) {
                 System.out.println("Convergence achieved within tolerance after " + i + " iterations");
                 break; //exit loop when convergence is achieved

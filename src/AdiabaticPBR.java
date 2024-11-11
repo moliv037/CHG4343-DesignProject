@@ -45,7 +45,7 @@ public class AdiabaticPBR extends ReactorType implements ODERHS {
         int maxIt = 1001;
         double tolerance = 0.00001;
 
-        double[] temperature = ODESolver.euler(0.0, w, new double[]{0.0}, delW, maxIt, this, 0, tolerance);
+        double[] temperature = ODESolver.euler(0.0, w, new double[]{0.0}, delW, maxIt, this, 2, tolerance);
         super.resetGlobalVariables();
         return temperature;
     }
